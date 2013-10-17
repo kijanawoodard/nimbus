@@ -28,17 +28,6 @@ namespace nimbus
 		TResult Handle(IMediator mediator, TResult result, TMessage message);
 	}
 
-	public class Response
-	{
-		public virtual Exception Exception { get; set; }
-		public virtual bool Ok() { return Exception == null; }
-	}
-
-	public class Response<TResult> : Response
-	{
-		public virtual TResult Result { get; set; }
-	}
-
 	public interface IRegisterHandlers
 	{
 		void Register<TMessage, TResult>(Func<TResult> initial, Func<IHandleMarker<TMessage>[]> handlers);
@@ -46,7 +35,7 @@ namespace nimbus
 
 	public interface IMediator
 	{
-		Response<TResult> Send<TMessage, TResult>(TMessage message);
+		TResult Send<TMessage, TResult>(TMessage message);
 	}
 
 	public class Mediator : IRegisterHandlers, IMediator
@@ -58,29 +47,20 @@ namespace nimbus
 			_registrations.Add(typeof(TMessage), new Registration(() => initial(), handlers));
 		}
 
-		public Response<TResult> Send<TMessage, TResult>(TMessage message)
+		public TResult Send<TMessage, TResult>(TMessage message)
 		{
 			if (!_registrations.ContainsKey(typeof(TMessage)))
 				throw new ApplicationException("No Handlers registered for " + typeof(TMessage).Name);
 
 			var registration = _registrations[typeof(TMessage)];
 			var handlers = registration.CreateHandlers();
-			var response = new Response<TResult>();
-			response.Result = registration.InitializeResponse();
+			var response = registration.InitializeResponse();
 
-			try
+			foreach (var handler in handlers)
 			{
-				foreach (var handler in handlers)
-				{
-					response.Result = Dispatch(handler, message, response.Result);
-				}
-			}
-			catch (Exception e)
-			{
-				response.Exception = e;
+				response = Dispatch(handler, message, response);
 			}
 
-			response.Result = response.Result;
 			return response;
 		}
 

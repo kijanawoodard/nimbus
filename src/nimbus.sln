@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nimbus", "nimbus.csproj", "{4FDBCC13-D102-4041-BE8B-5108A2C7241C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nimbus.tests", "nimbus.tests\nimbus.tests.csproj", "{2208ACB4-AD20-48F8-8EFF-35A0899DF3A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{4FDBCC13-D102-4041-BE8B-5108A2C7241C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FDBCC13-D102-4041-BE8B-5108A2C7241C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FDBCC13-D102-4041-BE8B-5108A2C7241C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2208ACB4-AD20-48F8-8EFF-35A0899DF3A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2208ACB4-AD20-48F8-8EFF-35A0899DF3A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2208ACB4-AD20-48F8-8EFF-35A0899DF3A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2208ACB4-AD20-48F8-8EFF-35A0899DF3A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

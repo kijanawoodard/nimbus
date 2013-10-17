@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nimbus
 {
-    public interface IMediator
+	public interface IHandleMarker<in TMessage>
 	{
-		TResult Send<TMessage, TResult>(TMessage message);
+		
 	}
-
-	public interface IRegisterHandlers
-	{
-		void Register<TMessage, TResult>(Func<TResult> initial, Func<IHandleMarker<TMessage>[]> handlers);
-	}
-
-	public interface IHandleMarker<in TMessage> { }
 
 	public interface IHandle<in TMessage> : IHandleMarker<TMessage>
 	{
@@ -44,9 +34,19 @@ namespace nimbus
 		public virtual bool Ok() { return Exception == null; }
 	}
 
-	public class Response<TResponse> : Response
+	public class Response<TResult> : Response
 	{
-		public virtual TResponse Outcome { get; set; }
+		public virtual TResult Result { get; set; }
+	}
+
+	public interface IRegisterHandlers
+	{
+		void Register<TMessage, TResult>(Func<TResult> initial, Func<IHandleMarker<TMessage>[]> handlers);
+	}
+
+	public interface IMediator
+	{
+		Response<TResult> Send<TMessage, TResult>(TMessage message);
 	}
 
 	public class Mediator : IRegisterHandlers, IMediator
@@ -58,21 +58,30 @@ namespace nimbus
 			_registrations.Add(typeof(TMessage), new Registration(() => initial(), handlers));
 		}
 
-		public TResult Send<TMessage, TResult>(TMessage message)
+		public Response<TResult> Send<TMessage, TResult>(TMessage message)
 		{
 			if (!_registrations.ContainsKey(typeof(TMessage)))
 				throw new ApplicationException("No Handlers registered for " + typeof(TMessage).Name);
 
-			var registration = _registrations[typeof (TMessage)];
-			var result = registration.InitializeResponse();
+			var registration = _registrations[typeof(TMessage)];
 			var handlers = registration.CreateHandlers();
-			
-			foreach (var handler in handlers)
+			var response = new Response<TResult>();
+			response.Result = registration.InitializeResponse();
+
+			try
 			{
-				result = Dispatch(handler, message, result);
+				foreach (var handler in handlers)
+				{
+					response.Result = Dispatch(handler, message, response.Result);
+				}
+			}
+			catch (Exception e)
+			{
+				response.Exception = e;
 			}
 
-			return result;
+			response.Result = response.Result;
+			return response;
 		}
 
 		private TResult Dispatch<TMessage, TResult>(IHandle<TMessage> handler, TMessage message, TResult result)
@@ -85,7 +94,7 @@ namespace nimbus
 		{
 			return handler.Handle(result, message);
 		}
-		
+
 		private TResult Dispatch<TMessage, TResult>(IHandleWithMediator<TMessage> handler, TMessage message, TResult result)
 		{
 			handler.Handle(this, message);
@@ -111,7 +120,7 @@ namespace nimbus
 			}
 
 			public Func<dynamic> InitializeResponse { get; private set; }
-			public Func<dynamic[]> CreateHandlers { get; private set; } 
+			public Func<dynamic[]> CreateHandlers { get; private set; }
 		}
 	}
 }

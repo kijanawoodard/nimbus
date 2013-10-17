@@ -21,8 +21,8 @@ namespace nimbus.tests
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
 			var result = mediator.Send<ChangeUserName, string>(command);
-			Console.WriteLine("Result: {0}", result);
-			Assert.AreEqual("Foo Bar", result);
+			Console.WriteLine("Result: {0}", result.Result);
+			Assert.AreEqual("Foo Bar", result.Result);
 		}
 
 		[Test]

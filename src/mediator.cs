@@ -50,17 +50,15 @@ namespace nimbus
 
 		public void Send<TMessage>(TMessage message)
 		{
-			var registration = _registrations[typeof(TMessage)];
-			var handlers = registration.CreateHandlers();
-			var response = registration.InitializeResponse();
-
-			foreach (var handler in handlers)
-			{
-				response = Dispatch(handler, message, response);
-			}
+			Execute(message);
 		}
 
 		public TResult Send<TMessage, TResult>(TMessage message)
+		{
+			return Execute(message);
+		}
+		
+		private dynamic Execute<TMessage>(TMessage message)
 		{
 			if (!_registrations.ContainsKey(typeof(TMessage)))
 				throw new ApplicationException("No Handlers registered for " + typeof(TMessage).Name);

@@ -30,6 +30,7 @@ namespace nimbus
 
 	public interface IRegisterHandlers
 	{
+		void Register<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new();
 		void Register<TMessage, TResult>(Func<TResult> initial, Func<IHandleMarker<TMessage>[]> handlers);
 	}
 
@@ -42,6 +43,11 @@ namespace nimbus
 	public class Mediator : IRegisterHandlers, IMediator
 	{
 		private readonly Dictionary<Type, Registration> _registrations;
+
+		public void Register<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new()
+		{
+			_registrations.Add(typeof(TMessage), new Registration(() => new TResult(), handlers));
+		}
 
 		public void Register<TMessage, TResult>(Func<TResult> initial, Func<IHandleMarker<TMessage>[]> handlers)
 		{

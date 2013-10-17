@@ -83,6 +83,18 @@ namespace nimbus.tests
 		}
 
 		[Test]
+		public void CanRegisterClassWithoutFunc()
+		{
+			var mediator = new Mediator();
+
+			mediator.Register<GetUserName, NameViewModel>(
+				() => new IHandleMarker<GetUserName>[] { new JimNameRepository() });
+
+			var result = mediator.Send<GetUserName, NameViewModel>(new GetUserName());
+			Assert.AreEqual("Jim", result.Name);
+		}
+
+		[Test]
 		public void Throws_If_Message_Not_Registered()
 		{
 			var mediator = new Mediator();
@@ -129,5 +141,25 @@ namespace nimbus.tests
 				
 			}
 		}
+
+		public class GetUserName
+		{
+
+		}
+
+		public class NameViewModel
+		{
+			public string Name { get; set; }
+		}
+
+		public class JimNameRepository : IHandle<GetUserName, NameViewModel>
+		{
+			public NameViewModel Handle(NameViewModel result, GetUserName message)
+			{
+				result.Name = "Jim";
+				return result;
+			}
+		}
+
     }
 }

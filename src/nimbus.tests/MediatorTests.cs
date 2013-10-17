@@ -10,19 +10,76 @@ namespace nimbus.tests
     public class MediatorTests
     {
 		[Test]
-		public void Sanity()
+		public void CanGetResult()
+		{
+			var mediator = new Mediator();
+
+			mediator.Register<ChangeUserName, string>(
+				() => string.Empty,
+				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName() });
+
+			var command = new ChangeUserName { Name = "Foo Bar" };
+			var result = mediator.Send<ChangeUserName, string>(command);
+			Assert.AreEqual("Foo Bar", result);
+		}
+
+		[Test]
+		public void CanGetResultWithASecondVoidHandler()
+		{
+			var mediator = new Mediator();
+
+			mediator.Register<ChangeUserName, string>(
+				() => string.Empty,
+				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName(), new ConsoleLogger() });
+
+			var command = new ChangeUserName { Name = "Foo Bar" };
+			var result = mediator.Send<ChangeUserName, string>(command);
+			Assert.AreEqual("Foo Bar", result);
+		}
+
+		[Test]
+		public void OrderOfResultAndVoidHandlersDoesntMatter()
+		{
+			var mediator = new Mediator();
+
+			mediator.Register<ChangeUserName, string>(
+				() => string.Empty,
+				() => new IHandleMarker<ChangeUserName>[] { new ConsoleLogger(), new ReturnsName() });
+
+			var command = new ChangeUserName { Name = "Foo Bar" };
+			var result = mediator.Send<ChangeUserName, string>(command);
+			Assert.AreEqual("Foo Bar", result);
+		}
+
+		[Test]
+		public void CanHaveAContravariantHandler()
 		{
 			var mediator = new Mediator();
 
 			mediator.Register<ChangeUserName, string>(
 				() => string.Empty, 
 				() => new IHandleMarker<ChangeUserName>[] 
-					{ new FakePersistance(), new GenericHook(), new ConsoleLogger() });
+					{ new ReturnsName(), new GenericHook(), new ConsoleLogger() });
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
 			var result = mediator.Send<ChangeUserName, string>(command);
 			Console.WriteLine("Result: {0}", result);
 			Assert.AreEqual("Foo Bar", result);
+		}
+
+		[Test]
+		public void CanSendWithoutResult()
+		{
+			var mediator = new Mediator();
+
+			var counter = new Counter();
+			mediator.Register<ChangeUserName, string>(
+				() => string.Empty,
+				() => new IHandleMarker<ChangeUserName>[] { counter });
+
+			var command = new ChangeUserName { Name = "Foo Bar" };
+			mediator.Send<ChangeUserName>(command);
+			Assert.AreEqual(1, counter.Count);
 		}
 
 		[Test]
@@ -39,7 +96,7 @@ namespace nimbus.tests
 			public string Name { get; set; }
 		}
 
-		public class FakePersistance : IHandleWithMediator<ChangeUserName, string>
+		public class ReturnsName : IHandleWithMediator<ChangeUserName, string>
 		{
 			public string Handle(IMediator mediator, string result, ChangeUserName message)
 			{
@@ -52,6 +109,16 @@ namespace nimbus.tests
 			public void Handle(IMediator mediator, ChangeUserName message)
 			{
 				Console.WriteLine(message.Name);
+			}
+		}
+
+		public class Counter : IHandleWithMediator<ChangeUserName>
+		{
+			public int Count { get; set; }
+
+			public void Handle(IMediator mediator, ChangeUserName message)
+			{
+				Count++;
 			}
 		}
 

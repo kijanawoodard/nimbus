@@ -35,6 +35,7 @@ namespace nimbus
 
 	public interface IMediator
 	{
+		void Send<TMessage>(TMessage message);
 		TResult Send<TMessage, TResult>(TMessage message);
 	}
 
@@ -45,6 +46,18 @@ namespace nimbus
 		public void Register<TMessage, TResult>(Func<TResult> initial, Func<IHandleMarker<TMessage>[]> handlers)
 		{
 			_registrations.Add(typeof(TMessage), new Registration(() => initial(), handlers));
+		}
+
+		public void Send<TMessage>(TMessage message)
+		{
+			var registration = _registrations[typeof(TMessage)];
+			var handlers = registration.CreateHandlers();
+			var response = registration.InitializeResponse();
+
+			foreach (var handler in handlers)
+			{
+				response = Dispatch(handler, message, response);
+			}
 		}
 
 		public TResult Send<TMessage, TResult>(TMessage message)

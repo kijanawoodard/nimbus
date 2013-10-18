@@ -89,6 +89,15 @@ Minimize dependencies. If a class only depends on a mediator and on messages, im
 ###UnitOfWork
 ###Use Mediator in handler		
 
+	public class AccountExpiditer : IHandleWithMediator<ProcessAccount>
+	{
+		public void Handle(IMediator mediator, ProcessAccount message)
+		{
+			var account = mediator.Send<GetAccount, Account>(new GetAccount());
+			account.Process();
+		}
+	}
+	
 ##Why not ...?
 
 [NServiceBus] - I love NServiceBus, but sometimes I just want an in memory bus. NServiceBus 4.0 has an [in memory bus][nsb in memory], but it's semantics are restricted to publishing events. Nimbus is more concerned with mediating messages without regard to command/query semantics.

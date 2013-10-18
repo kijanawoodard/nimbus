@@ -177,6 +177,16 @@ namespace nimbus.tests
 			mediator.Send(new ChangeUserName { Name = "Foo Bar" });
 		}
 
+	    [Test]
+	    public void CanUseMediatorWithinHandler()
+	    {
+			var mediator = new Mediator();
+			mediator.Subscribe<ProcessAccount, AccountExpiditer>();
+		    mediator.Subscribe<GetAccount, Account>(() => new [] {new AccountRepository()});
+
+		    mediator.Send(new ProcessAccount());
+	    }
+
 		public class ChangeUserName
 		{
 			public string Name { get; set; }
@@ -190,27 +200,27 @@ namespace nimbus.tests
 			}
 		}
 
-		public class ReturnsName : IHandleWithMediator<ChangeUserName, string>
+		public class ReturnsName : IHandle<ChangeUserName, string>
 		{
-			public string Handle(IMediator mediator, ChangeUserName message, string result)
+			public string Handle(ChangeUserName message, string result)
 			{
 				return message.Name;
 			}
 		}
 
-		public class ConsoleLogger : IHandleWithMediator<ChangeUserName>
+		public class ConsoleLogger : IHandle<ChangeUserName>
 		{
-			public void Handle(IMediator mediator, ChangeUserName message)
+			public void Handle(ChangeUserName message)
 			{
 				Console.WriteLine(message.Name);
 			}
 		}
 
-		public class Counter : IHandleWithMediator<ChangeUserName>
+		public class Counter : IHandle<ChangeUserName>
 		{
 			public int Count { get; set; }
 
-			public void Handle(IMediator mediator, ChangeUserName message)
+			public void Handle(ChangeUserName message)
 			{
 				Count++;
 			}
@@ -257,5 +267,29 @@ namespace nimbus.tests
 			}
 		}
 
+		public class Account
+		{
+			public void Process() { Console.WriteLine("account processed"); }
+		}
+
+		public class ProcessAccount{ /*account id*/ }
+		public class GetAccount { /*account id*/ }
+		
+		public class AccountRepository: IHandle<GetAccount, Account>
+		{
+			public Account Handle(GetAccount message, Account result)
+			{
+				return new Account(); //return account 
+			}
+		}
+
+		public class AccountExpiditer : IHandleWithMediator<ProcessAccount>
+		{
+			public void Handle(IMediator mediator, ProcessAccount message)
+			{
+				var account = mediator.Send<GetAccount, Account>(new GetAccount());
+				account.Process();
+			}
+		}
     }
 }

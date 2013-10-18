@@ -28,7 +28,7 @@ namespace nimbus
 		TResult Handle(IMediator mediator, TMessage message, TResult result);
 	}
 
-	public interface IRegisterHandlers
+	public interface ISubscribeHandlers
 	{
 		void Subscribe<TMessage>(Func<IHandleMarker<TMessage>[]> handlers);
 		void Subscribe<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new();
@@ -42,7 +42,7 @@ namespace nimbus
 		TResult Send<TMessage, TResult>(TMessage message);
 	}
 
-	public class Mediator : IRegisterHandlers, IMediator
+	public class Mediator : ISubscribeHandlers, IMediator
 	{
 		private readonly Dictionary<Type, Registration> _subscriptions;
 

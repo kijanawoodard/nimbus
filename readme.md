@@ -111,7 +111,9 @@ Minimize dependencies. If a class only depends on a mediator and on messages, im
 			Assert.AreEqual("Ellie", elephant.Name);
 		}
 	}
-				
+
+[Full source for UoW example][uow]
+	
 ##Why not ...?
 
 [NServiceBus] - I love NServiceBus, but sometimes I just want an in memory bus. NServiceBus 4.0 has an [in memory bus][nsb in memory], but it's semantics are restricted to publishing events. Nimbus is more concerned with mediating messages without regard to command/query semantics.
@@ -123,13 +125,17 @@ Minimize dependencies. If a class only depends on a mediator and on messages, im
 Microsoft Azure/Windows [Service Bus][microsoft service bus] - More than what I wanted for nimbus obviously. 
 
 [MemBus] - Needs an IoC container.
+
 [Reactor]
+
 [RockBus]
+
 [esb.net]
 
 [morewords.com]: http://www.morewords.com/word/nimbus/
 [nimble]: http://www.merriam-webster.com/dictionary/nimble
 [ShortBus]: https://github.com/mhinze/ShortBus
+[uow]: https://github.com/kijanawoodard/nimbus/blob/ab7ff533da2f44e3c2f5ed1c6daaf36e907deb7e/src/nimbus.tests/RavenMediatorTests.cs#L21
 [NServiceBus]: http://particular.net/NServiceBus
 [nsb in memory]: http://particular.net/articles/using-the-in-memory-bus
 [Mass Transit]: http://masstransit-project.com/

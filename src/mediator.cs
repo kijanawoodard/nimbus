@@ -88,7 +88,7 @@ namespace nimbus
 
 			var registration = _subscriptions[typeof(TMessage)];
 			var handlers = registration.CreateHandlers();
-			var response = registration.InitializeResponse();
+			var response = registration.InitializeResult();
 
 			foreach (var handler in handlers)
 			{
@@ -127,13 +127,13 @@ namespace nimbus
 
 		class Registration
 		{
-			public Registration(Func<dynamic> initializeResponse, Func<dynamic[]> createHandlers)
+			public Registration(Func<dynamic> initializeResult, Func<dynamic[]> createHandlers)
 			{
-				InitializeResponse = initializeResponse;
+				InitializeResult = initializeResult;
 				CreateHandlers = createHandlers;
 			}
 
-			public Func<dynamic> InitializeResponse { get; private set; }
+			public Func<dynamic> InitializeResult { get; private set; }
 			public Func<dynamic[]> CreateHandlers { get; private set; }
 		}
 	}

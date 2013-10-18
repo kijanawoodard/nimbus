@@ -158,8 +158,7 @@ namespace nimbus.tests
 		{
 			public void Handle(ChangeUserName message)
 			{
-				//do persistentce
-
+				//do persistence
 			}
 		}
 

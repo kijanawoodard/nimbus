@@ -95,13 +95,25 @@ namespace nimbus.tests
 		}
 
 		[Test]
+		public void CanRegisterAScalarResultWithoutAFunc()
+		{
+			var mediator = new Mediator();
+
+			mediator.RegisterScalar<ChangeUserName, string>(
+				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName() });
+
+			var command = new ChangeUserName { Name = "Foo Bar" };
+			var result = mediator.Send<ChangeUserName, string>(command);
+			Assert.AreEqual("Foo Bar", result);
+		}
+
+		[Test]
 		public void Throws_If_Message_Not_Registered()
 		{
 			var mediator = new Mediator();
 			Assert.Throws<ApplicationException>(
 				() => mediator.Send<ChangeUserName, string>(new ChangeUserName()));
 		}
-
 
 		public class ChangeUserName
 		{

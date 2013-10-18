@@ -3,37 +3,37 @@ using System.Collections.Generic;
 
 namespace nimbus
 {
-	public interface IHandleMessages<in TMessage>
+	public interface ISubscribeFor<in TMessage>
 	{
 		
 	}
 
-	public interface IHandle<in TMessage> : IHandleMessages<TMessage>
+	public interface IHandle<in TMessage> : ISubscribeFor<TMessage>
 	{
 		void Handle(TMessage message);
 	}
 
-	public interface IHandle<in TMessage, TResult> : IHandleMessages<TMessage>
+	public interface IHandle<in TMessage, TResult> : ISubscribeFor<TMessage>
 	{
 		TResult Handle(TMessage message, TResult result);
 	}
 
-	public interface IHandleWithMediator<in TMessage> : IHandleMessages<TMessage>
+	public interface IHandleWithMediator<in TMessage> : ISubscribeFor<TMessage>
 	{
 		void Handle(IMediator mediator, TMessage message);
 	}
 
-	public interface IHandleWithMediator<in TMessage, TResult> : IHandleMessages<TMessage>
+	public interface IHandleWithMediator<in TMessage, TResult> : ISubscribeFor<TMessage>
 	{
 		TResult Handle(IMediator mediator, TMessage message, TResult result);
 	}
 
 	public interface ISubscribeHandlers
 	{
-		void Subscribe<TMessage>(Func<IHandleMessages<TMessage>[]> handlers);
-		void Subscribe<TMessage, TResult>(Func<IHandleMessages<TMessage>[]> handlers) where TResult : new();
-		void Subscribe<TMessage, TResult>(Func<IHandleMessages<TMessage>[]> handlers, Func<TResult> initializeResult);
-		void SubscribeScalar<TMessage, TResult>(Func<IHandleMessages<TMessage>[]> handlers);
+		void Subscribe<TMessage>(Func<ISubscribeFor<TMessage>[]> handlers);
+		void Subscribe<TMessage, TResult>(Func<ISubscribeFor<TMessage>[]> handlers) where TResult : new();
+		void Subscribe<TMessage, TResult>(Func<ISubscribeFor<TMessage>[]> handlers, Func<TResult> initializeResult);
+		void SubscribeScalar<TMessage, TResult>(Func<ISubscribeFor<TMessage>[]> handlers);
 	}
 
 	public interface IMediator
@@ -46,27 +46,27 @@ namespace nimbus
 	{
 		private readonly Dictionary<Type, Subscription> _subscriptions;
 
-		public void Subscribe<TMessage>(Func<IHandleMessages<TMessage>[]> handlers)
+		public void Subscribe<TMessage>(Func<ISubscribeFor<TMessage>[]> handlers)
 		{
 			SubscribeInternal(handlers, () => string.Empty);
 		}
 
-		public void Subscribe<TMessage, TResult>(Func<IHandleMessages<TMessage>[]> handlers) where TResult : new()
+		public void Subscribe<TMessage, TResult>(Func<ISubscribeFor<TMessage>[]> handlers) where TResult : new()
 		{
 			SubscribeInternal(handlers, () => new TResult());
 		}
 
-		public void Subscribe<TMessage, TResult>(Func<IHandleMessages<TMessage>[]> handlers, Func<TResult> initializeResult)
+		public void Subscribe<TMessage, TResult>(Func<ISubscribeFor<TMessage>[]> handlers, Func<TResult> initializeResult)
 		{
 			SubscribeInternal(handlers, () => initializeResult());
 		}
 
-		public void SubscribeScalar<TMessage, TResult>(Func<IHandleMessages<TMessage>[]> handlers)
+		public void SubscribeScalar<TMessage, TResult>(Func<ISubscribeFor<TMessage>[]> handlers)
 		{
 			SubscribeInternal(handlers, () => default(TResult));
 		}
 
-		private void SubscribeInternal<TMessage>(Func<IHandleMessages<TMessage>[]> handlers, Func<dynamic> initializeResult)
+		private void SubscribeInternal<TMessage>(Func<ISubscribeFor<TMessage>[]> handlers, Func<dynamic> initializeResult)
 		{
 			_subscriptions.Add(typeof(TMessage), new Subscription(handlers, initializeResult));
 		}

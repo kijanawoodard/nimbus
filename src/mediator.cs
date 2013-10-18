@@ -48,25 +48,25 @@ namespace nimbus
 
 		public void Subscribe<TMessage>(Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			Subscribe<TMessage>(() => string.Empty, handlers);
+			SubscribeInternal(handlers, () => string.Empty);
 		}
 
 		public void Subscribe<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new()
 		{
-			Subscribe<TMessage>(() => new TResult(), handlers);
+			SubscribeInternal(handlers, () => new TResult());
 		}
 
 		public void Subscribe<TMessage, TResult>(Func<TResult> initializeResult, Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			Subscribe<TMessage>(() => initializeResult(), handlers);
+			SubscribeInternal(handlers, () => initializeResult());
 		}
 
 		public void SubscribeScalar<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			Subscribe<TMessage>(() => default(TResult), handlers);
+			SubscribeInternal(handlers, () => default(TResult));
 		}
 
-		private void Subscribe<TMessage>(Func<dynamic> initializeResult, Func<IHandleMarker<TMessage>[]> handlers)
+		private void SubscribeInternal<TMessage>(Func<IHandleMarker<TMessage>[]> handlers, Func<dynamic> initializeResult)
 		{
 			_subscriptions.Add(typeof(TMessage), new Registration(initializeResult, handlers));
 		}

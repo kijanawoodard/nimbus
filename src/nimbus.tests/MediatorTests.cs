@@ -141,9 +141,26 @@ namespace nimbus.tests
 			Assert.AreEqual(1, counter.Count);
 		}
 
+		[Test]
+		public void CanSubscribeAndSendWithoutGenericArgs()
+		{
+			var mediator = new Mediator();
+			mediator.Subscribe(() => new [] { new NamePersistor() });
+			mediator.Send(new ChangeUserName { Name = "Foo Bar" });
+		}
+
 		public class ChangeUserName
 		{
 			public string Name { get; set; }
+		}
+
+		public class NamePersistor : IHandle<ChangeUserName>
+		{
+			public void Handle(ChangeUserName message)
+			{
+				//do persistentce
+
+			}
 		}
 
 		public class ReturnsName : IHandleWithMediator<ChangeUserName, string>

@@ -116,7 +116,7 @@ Minimize dependencies. If a class only depends on a mediator and on messages, im
 	
 ##Why not ...?
 
-[NServiceBus] - I love NServiceBus, but sometimes I just want an in memory bus. NServiceBus 4.0 has an [in memory bus][nsb in memory], but it's semantics are restricted to publishing events. Nimbus is more concerned with mediating messages without regard to command/query semantics.
+[NServiceBus] - I love NServiceBus, but sometimes I just want an in memory bus. [NServiceBus 4.0 has one][nsb in memory], but it's semantics are restricted to publishing events. Nimbus is more concerned with mediating messages without regard to command/query semantics.
 
 [Mass Transit] - I've never used it, but I've met some of the team members and it looks great. Like NServiceBus, it's main goal is distributed messaging, and that isn't a goal of nimbus.
 

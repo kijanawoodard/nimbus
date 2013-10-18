@@ -48,22 +48,27 @@ namespace nimbus
 
 		public void Register<TMessage>(Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			_registrations.Add(typeof(TMessage), new Registration(() => string.Empty, handlers));
+			Subscribe(() => string.Empty, handlers);
 		}
 
 		public void Register<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new()
 		{
-			_registrations.Add(typeof(TMessage), new Registration(() => new TResult(), handlers));
+			Subscribe(() => new TResult(), handlers);
 		}
 
 		public void Register<TMessage, TResult>(Func<TResult> initializeResult, Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			_registrations.Add(typeof(TMessage), new Registration(() => initializeResult(), handlers));
+			Subscribe(() => initializeResult(), handlers);
 		}
 
 		public void RegisterScalar<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			_registrations.Add(typeof(TMessage), new Registration(() => default(TResult), handlers));
+			Subscribe(() => default(TResult), handlers);
+		}
+
+		private void Subscribe<TMessage>(Func<dynamic> initializeResult, Func<IHandleMarker<TMessage>[]> handlers)
+		{
+			_registrations.Add(typeof(TMessage), new Registration(initializeResult, handlers));
 		}
 
 		public void Send<TMessage>(TMessage message)

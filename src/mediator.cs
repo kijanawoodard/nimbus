@@ -48,7 +48,7 @@ namespace nimbus
 
 		public void Register<TMessage>(Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			
+			_registrations.Add(typeof(TMessage), new Registration(() => string.Empty, handlers));
 		}
 
 		public void Register<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new()

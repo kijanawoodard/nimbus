@@ -10,6 +10,14 @@ namespace nimbus.tests
     public class MediatorTests
     {
 		[Test]
+		public void Throws_If_Message_Not_Registered()
+		{
+			var mediator = new Mediator();
+			Assert.Throws<ApplicationException>(
+				() => mediator.Send<ChangeUserName, string>(new ChangeUserName()));
+		}
+
+		[Test]
 		public void CanGetResult()
 		{
 			var mediator = new Mediator();
@@ -108,11 +116,17 @@ namespace nimbus.tests
 		}
 
 		[Test]
-		public void Throws_If_Message_Not_Registered()
+		public void CanRegisterWithoutAResult()
 		{
 			var mediator = new Mediator();
-			Assert.Throws<ApplicationException>(
-				() => mediator.Send<ChangeUserName, string>(new ChangeUserName()));
+
+			var counter = new Counter();
+			mediator.Register<ChangeUserName>(
+				() => new IHandleMarker<ChangeUserName>[] { counter });
+
+			var command = new ChangeUserName { Name = "Foo Bar" };
+			mediator.Send<ChangeUserName>(command);
+			Assert.AreEqual(1, counter.Count);
 		}
 
 		public class ChangeUserName

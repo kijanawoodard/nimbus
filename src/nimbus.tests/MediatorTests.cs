@@ -94,11 +94,23 @@ namespace nimbus.tests
 		{
 			var mediator = new Mediator();
 
-			mediator.Subscribe<GetUserName, NameViewModel>(
-				() => new ISubscribeFor<GetUserName>[] { new JimNameRepository() });
+			mediator.Subscribe<GetUserName, NameViewModel>(() => new [] { new SomeRepository() });
 
 			var result = mediator.Send<GetUserName, NameViewModel>(new GetUserName());
-			Assert.AreEqual("Jim", result.Name);
+			Assert.AreEqual("Some Name", result.Name);
+		}
+
+		[Test]
+		public void CanSubscribeAndSupplyParameterToResultClass()
+		{
+			var mediator = new Mediator();
+
+			mediator.Subscribe<GetUserName, NameViewModel>(
+					() => new[] { new SomeRepository() },
+					() => new NameViewModel("some value"));
+
+			var result = mediator.Send<GetUserName, NameViewModel>(new GetUserName());
+			Assert.AreEqual("Some Name", result.Name);
 		}
 
 		[Test]
@@ -147,6 +159,14 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 			mediator.Subscribe(() => new [] { new NamePersistor() });
 			mediator.Send(new ChangeUserName { Name = "Foo Bar" });
+		}
+
+		[Test]
+		public void SecondSubscription_Throws()
+		{
+			var mediator = new Mediator();
+			mediator.Subscribe(() => new[] { new NamePersistor() });
+			Assert.Throws<ArgumentException>(() => mediator.Subscribe(() => new[] { new Returns42() }));
 		}
 
 		public class ChangeUserName
@@ -211,14 +231,20 @@ namespace nimbus.tests
 
 		public class NameViewModel
 		{
+			public NameViewModel() { }
+			public NameViewModel(string someParam) { }
+
 			public string Name { get; set; }
 		}
 
-		public class JimNameRepository : IHandle<GetUserName, NameViewModel>
+		public class SomeRepository : IHandle<GetUserName, NameViewModel>
 		{
+			public SomeRepository() { }
+			public SomeRepository(string someParam) { }
+
 			public NameViewModel Handle(GetUserName message, NameViewModel result)
 			{
-				result.Name = "Jim";
+				result.Name = "Some Name";
 				return result;
 			}
 		}

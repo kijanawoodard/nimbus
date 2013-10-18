@@ -169,6 +169,14 @@ namespace nimbus.tests
 			Assert.Throws<ArgumentException>(() => mediator.Subscribe(() => new[] { new Returns42() }));
 		}
 
+		[Test]
+		public void CanSubscribeViaGenericArg()
+		{
+			var mediator = new Mediator();
+			mediator.Subscribe<ChangeUserName, NamePersistor>();
+			mediator.Send(new ChangeUserName { Name = "Foo Bar" });
+		}
+
 		public class ChangeUserName
 		{
 			public string Name { get; set; }

@@ -28,6 +28,7 @@ namespace nimbus
 
 	public interface ISubscribeHandlers
 	{
+		void Subscribe<TMessage, THandler>() where THandler : ISubscribeFor<TMessage>, new();
 		void Subscribe<TMessage>(Func<ISubscribeFor<TMessage>[]> handlers);
 		void Subscribe<TMessage, TResult>(Func<ISubscribeFor<TMessage>[]> handlers) where TResult : new();
 		void Subscribe<TMessage, TResult>(Func<ISubscribeFor<TMessage>[]> handlers, Func<TResult> initializeResult);
@@ -43,6 +44,11 @@ namespace nimbus
 	public class Mediator : ISubscribeHandlers, IMediator
 	{
 		private readonly Dictionary<Type, Subscription> _subscriptions;
+
+		public void Subscribe<TMessage, THandler>() where THandler : ISubscribeFor<TMessage>, new()
+		{
+			SubscribeInternal(() => new ISubscribeFor<TMessage>[] { new THandler() }, () => string.Empty);
+		}
 
 		public void Subscribe<TMessage>(Func<ISubscribeFor<TMessage>[]> handlers)
 		{

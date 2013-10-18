@@ -90,7 +90,9 @@ namespace nimbus
 
 			/*
 			 * Use dynamic dispatch instead of if statements
-			 * If you get a RuntimeBinderException, more than likely you have mixed types for TResult
+			 * If you get a RuntimeBinderException, more than likely you have 
+			 *		mixed types for TResult in your subscribed handlers
+			 *		asked for a TResult in Send with a different type than in the subscription
 			 */
 			foreach (var handler in handlers)
 			{

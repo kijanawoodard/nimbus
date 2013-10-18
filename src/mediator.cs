@@ -30,10 +30,10 @@ namespace nimbus
 
 	public interface IRegisterHandlers
 	{
-		void Register<TMessage>(Func<IHandleMarker<TMessage>[]> handlers);
-		void Register<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new();
-		void Register<TMessage, TResult>(Func<TResult> initializeResult, Func<IHandleMarker<TMessage>[]> handlers);
-		void RegisterScalar<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers);
+		void Subscribe<TMessage>(Func<IHandleMarker<TMessage>[]> handlers);
+		void Subscribe<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new();
+		void Subscribe<TMessage, TResult>(Func<TResult> initializeResult, Func<IHandleMarker<TMessage>[]> handlers);
+		void SubscribeScalar<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers);
 	}
 
 	public interface IMediator
@@ -44,31 +44,31 @@ namespace nimbus
 
 	public class Mediator : IRegisterHandlers, IMediator
 	{
-		private readonly Dictionary<Type, Registration> _registrations;
+		private readonly Dictionary<Type, Registration> _subscriptions;
 
-		public void Register<TMessage>(Func<IHandleMarker<TMessage>[]> handlers)
+		public void Subscribe<TMessage>(Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			Subscribe(() => string.Empty, handlers);
+			Subscribe<TMessage>(() => string.Empty, handlers);
 		}
 
-		public void Register<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new()
+		public void Subscribe<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new()
 		{
-			Subscribe(() => new TResult(), handlers);
+			Subscribe<TMessage>(() => new TResult(), handlers);
 		}
 
-		public void Register<TMessage, TResult>(Func<TResult> initializeResult, Func<IHandleMarker<TMessage>[]> handlers)
+		public void Subscribe<TMessage, TResult>(Func<TResult> initializeResult, Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			Subscribe(() => initializeResult(), handlers);
+			Subscribe<TMessage>(() => initializeResult(), handlers);
 		}
 
-		public void RegisterScalar<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers)
+		public void SubscribeScalar<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			Subscribe(() => default(TResult), handlers);
+			Subscribe<TMessage>(() => default(TResult), handlers);
 		}
 
 		private void Subscribe<TMessage>(Func<dynamic> initializeResult, Func<IHandleMarker<TMessage>[]> handlers)
 		{
-			_registrations.Add(typeof(TMessage), new Registration(initializeResult, handlers));
+			_subscriptions.Add(typeof(TMessage), new Registration(initializeResult, handlers));
 		}
 
 		public void Send<TMessage>(TMessage message)
@@ -83,10 +83,10 @@ namespace nimbus
 		
 		private dynamic Execute<TMessage>(TMessage message)
 		{
-			if (!_registrations.ContainsKey(typeof(TMessage)))
-				throw new ApplicationException("No Handlers registered for " + typeof(TMessage).Name);
+			if (!_subscriptions.ContainsKey(typeof(TMessage)))
+				throw new ApplicationException("No Handlers subscribed for " + typeof(TMessage).Name);
 
-			var registration = _registrations[typeof(TMessage)];
+			var registration = _subscriptions[typeof(TMessage)];
 			var handlers = registration.CreateHandlers();
 			var response = registration.InitializeResponse();
 
@@ -122,7 +122,7 @@ namespace nimbus
 
 		public Mediator()
 		{
-			_registrations = new Dictionary<Type, Registration>();
+			_subscriptions = new Dictionary<Type, Registration>();
 		}
 
 		class Registration

@@ -10,7 +10,7 @@ namespace nimbus.tests
     public class MediatorTests
     {
 		[Test]
-		public void Throws_If_Message_Not_Registered()
+		public void Throws_If_Message_Not_Subscribed()
 		{
 			var mediator = new Mediator();
 			Assert.Throws<ApplicationException>(
@@ -22,7 +22,7 @@ namespace nimbus.tests
 		{
 			var mediator = new Mediator();
 
-			mediator.Register<ChangeUserName, string>(
+			mediator.Subscribe<ChangeUserName, string>(
 				() => string.Empty,
 				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName() });
 
@@ -36,7 +36,7 @@ namespace nimbus.tests
 		{
 			var mediator = new Mediator();
 
-			mediator.Register<ChangeUserName, string>(
+			mediator.Subscribe<ChangeUserName, string>(
 				() => string.Empty,
 				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName(), new ConsoleLogger() });
 
@@ -50,7 +50,7 @@ namespace nimbus.tests
 		{
 			var mediator = new Mediator();
 
-			mediator.Register<ChangeUserName, string>(
+			mediator.Subscribe<ChangeUserName, string>(
 				() => string.Empty,
 				() => new IHandleMarker<ChangeUserName>[] { new ConsoleLogger(), new ReturnsName() });
 
@@ -64,7 +64,7 @@ namespace nimbus.tests
 		{
 			var mediator = new Mediator();
 
-			mediator.Register<ChangeUserName, string>(
+			mediator.Subscribe<ChangeUserName, string>(
 				() => string.Empty, 
 				() => new IHandleMarker<ChangeUserName>[] 
 					{ new ReturnsName(), new GenericHook(), new ConsoleLogger() });
@@ -81,7 +81,7 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			var counter = new Counter();
-			mediator.Register<ChangeUserName, string>(
+			mediator.Subscribe<ChangeUserName, string>(
 				() => string.Empty,
 				() => new IHandleMarker<ChangeUserName>[] { counter });
 
@@ -91,11 +91,11 @@ namespace nimbus.tests
 		}
 
 		[Test]
-		public void CanRegisterClassWithoutFunc()
+		public void CanSubscribeClassWithoutFunc()
 		{
 			var mediator = new Mediator();
 
-			mediator.Register<GetUserName, NameViewModel>(
+			mediator.Subscribe<GetUserName, NameViewModel>(
 				() => new IHandleMarker<GetUserName>[] { new JimNameRepository() });
 
 			var result = mediator.Send<GetUserName, NameViewModel>(new GetUserName());
@@ -103,11 +103,11 @@ namespace nimbus.tests
 		}
 
 		[Test]
-		public void CanRegisterAScalarResultWithoutAFunc()
+		public void CanSubscribeAScalarResultWithoutAFunc()
 		{
 			var mediator = new Mediator();
 
-			mediator.RegisterScalar<ChangeUserName, string>(
+			mediator.SubscribeScalar<ChangeUserName, string>(
 				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName() });
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
@@ -116,12 +116,12 @@ namespace nimbus.tests
 		}
 
 		[Test]
-		public void CanRegisterWithoutAResult()
+		public void CanSubscribeWithoutAResult()
 		{
 			var mediator = new Mediator();
 
 			var counter = new Counter();
-			mediator.Register<ChangeUserName>(
+			mediator.Subscribe<ChangeUserName>(
 				() => new IHandleMarker<ChangeUserName>[] { counter });
 
 			var command = new ChangeUserName { Name = "Foo Bar" };

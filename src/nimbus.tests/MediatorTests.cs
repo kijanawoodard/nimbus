@@ -120,7 +120,7 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.SubscribeScalar<ChangeUserName, int>(
-				() => new ISubscribeFor<ChangeUserName>[] { new Returns42() });
+				() => new ISubscribeFor<ChangeUserName, int>[] { new Returns42() });
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
 			var result = mediator.Send<ChangeUserName, int>(command);

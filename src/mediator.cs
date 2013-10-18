@@ -3,17 +3,15 @@ using System.Collections.Generic;
 
 namespace nimbus
 {
-	public interface ISubscribeFor<in TMessage>
-	{
-		
-	}
+	public interface ISubscribeFor<in TMessage> { }
+	public interface ISubscribeFor<in TMessage, TResult> : ISubscribeFor<TMessage> { }
 
 	public interface IHandle<in TMessage> : ISubscribeFor<TMessage>
 	{
 		void Handle(TMessage message);
 	}
 
-	public interface IHandle<in TMessage, TResult> : ISubscribeFor<TMessage>
+	public interface IHandle<in TMessage, TResult> : ISubscribeFor<TMessage, TResult>
 	{
 		TResult Handle(TMessage message, TResult result);
 	}
@@ -23,7 +21,7 @@ namespace nimbus
 		void Handle(IMediator mediator, TMessage message);
 	}
 
-	public interface IHandleWithMediator<in TMessage, TResult> : ISubscribeFor<TMessage>
+	public interface IHandleWithMediator<in TMessage, TResult> : ISubscribeFor<TMessage, TResult>
 	{
 		TResult Handle(IMediator mediator, TMessage message, TResult result);
 	}

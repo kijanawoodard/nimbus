@@ -90,6 +90,10 @@ namespace nimbus
 			var handlers = registration.CreateHandlers();
 			var response = registration.InitializeResult();
 
+			/*
+			 * Use dynamic dispatch instead of if statements
+			 * If you get a RuntimeBinderException, more than likely you have mixed types for TResult
+			 */
 			foreach (var handler in handlers)
 			{
 				response = Dispatch(handler, message, response);

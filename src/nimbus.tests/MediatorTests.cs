@@ -23,8 +23,8 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => string.Empty,
-				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName() });
+				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName() },
+				() => string.Empty);
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
 			var result = mediator.Send<ChangeUserName, string>(command);
@@ -37,8 +37,8 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => string.Empty,
-				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName(), new ConsoleLogger() });
+				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName(), new ConsoleLogger() },
+				() => string.Empty);
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
 			var result = mediator.Send<ChangeUserName, string>(command);
@@ -51,8 +51,8 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => string.Empty,
-				() => new IHandleMarker<ChangeUserName>[] { new ConsoleLogger(), new ReturnsName() });
+				() => new IHandleMarker<ChangeUserName>[] { new ConsoleLogger(), new ReturnsName() },
+				() => string.Empty);
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
 			var result = mediator.Send<ChangeUserName, string>(command);
@@ -65,9 +65,8 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => string.Empty, 
-				() => new IHandleMarker<ChangeUserName>[] 
-					{ new ReturnsName(), new GenericHook(), new ConsoleLogger() });
+				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName(), new GenericHook(), new ConsoleLogger() },
+				() => string.Empty);
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
 			var result = mediator.Send<ChangeUserName, string>(command);
@@ -82,8 +81,8 @@ namespace nimbus.tests
 
 			var counter = new Counter();
 			mediator.Subscribe<ChangeUserName, string>(
-				() => string.Empty,
-				() => new IHandleMarker<ChangeUserName>[] { counter });
+				() => new IHandleMarker<ChangeUserName>[] { counter },
+				() => string.Empty);
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
 			mediator.Send<ChangeUserName>(command);

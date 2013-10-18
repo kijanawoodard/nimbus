@@ -32,7 +32,7 @@ namespace nimbus
 	{
 		void Subscribe<TMessage>(Func<IHandleMarker<TMessage>[]> handlers);
 		void Subscribe<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers) where TResult : new();
-		void Subscribe<TMessage, TResult>(Func<TResult> initializeResult, Func<IHandleMarker<TMessage>[]> handlers);
+		void Subscribe<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers, Func<TResult> initializeResult);
 		void SubscribeScalar<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers);
 	}
 
@@ -56,7 +56,7 @@ namespace nimbus
 			SubscribeInternal(handlers, () => new TResult());
 		}
 
-		public void Subscribe<TMessage, TResult>(Func<TResult> initializeResult, Func<IHandleMarker<TMessage>[]> handlers)
+		public void Subscribe<TMessage, TResult>(Func<IHandleMarker<TMessage>[]> handlers, Func<TResult> initializeResult)
 		{
 			SubscribeInternal(handlers, () => initializeResult());
 		}

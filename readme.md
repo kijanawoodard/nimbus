@@ -4,14 +4,15 @@
 >
 > -- <cite>[morewords.com]</cite>
 
-Or
+Send messages in, get messages back.
 
 >A [nimble] message bus
 
-Or
+Use normal programming techniques to configure your application.
 
 >.Net In-Memory Bus
 
+Happens now.
 
 ##Summary
 An in-memory bus, inspired by [ShortBus]. 
@@ -84,12 +85,30 @@ Nimbus does not have an opinion about Commands vs Queries or whether a response 
 	
 ###UnitOfWork
 ###Use Mediator in handler		
-		
-##License
-		
-MIT License
-2013 Kijana Woodard
+
+##Why not ...?
+
+[NServiceBus] - I love NServiceBus, but sometimes I just want an in memory bus. NServiceBus 4.0 has an [in memory bus][nsb in memory], but it's semantics are restricted to publishing events. Nimbus is more concerned with mediating messages without regard to command/query semantics.
+
+[Mass Transit] - I've never used it, but I've met some of the team members and it looks great. Like NServiceBus, it's main goal is distributed messaging, and that isn't a goal of nimbus.
+
+[ShortBus] - The main difference is nimbus makes no usage of an IoC container. Another minor difference is no separation between commands and queries.
+
+Microsoft Azure/Windows [Service Bus][microsoft service bus] - More than what I wanted for nimbus obviously. 
+
+[MemBus] - Needs an IoC container.
+[Reactor]
+[RockBus]
+[esb.net]
 
 [morewords.com]: http://www.morewords.com/word/nimbus/
 [nimble]: http://www.merriam-webster.com/dictionary/nimble
 [ShortBus]: https://github.com/mhinze/ShortBus
+[NServiceBus]: http://particular.net/NServiceBus
+[nsb in memory]: http://particular.net/articles/using-the-in-memory-bus
+[Mass Transit]: http://masstransit-project.com/
+[microsoft service bus]: http://www.windowsazure.com/en-us/documentation/services/service-bus/
+[MemBus]: https://github.com/flq/MemBus
+[Reactor]: http://reactorplatform.codeplex.com/wikipage?title=Reactor%20Service%20Bus
+[RockBus]: http://rockbus.codeplex.com/
+[esb.net]: http://keystrokeesbnet.codeplex.com/

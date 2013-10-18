@@ -47,12 +47,12 @@ namespace nimbus
 
 		public void Subscribe<TMessage, THandler>() where THandler : ISubscribeFor<TMessage>, new()
 		{
-			SubscribeInternal(() => new ISubscribeFor<TMessage>[] { new THandler() }, () => string.Empty);
+			SubscribeInternal(() => new ISubscribeFor<TMessage>[] { new THandler() }, () => new ResultTypeNotSpecifiedInSubscription());
 		}
 
 		public void Subscribe<TMessage>(Func<ISubscribeFor<TMessage>[]> handlers)
 		{
-			SubscribeInternal(handlers, () => string.Empty);
+			SubscribeInternal(handlers, () => new ResultTypeNotSpecifiedInSubscription());
 		}
 
 		public void Subscribe<TMessage, TResult>(Func<ISubscribeFor<TMessage>[]> handlers) where TResult : new()
@@ -146,5 +146,7 @@ namespace nimbus
 			public Func<dynamic[]> CreateHandlers { get; private set; }
 			public Func<dynamic> InitializeResult { get; private set; }
 		}
+
+		class ResultTypeNotSpecifiedInSubscription{ }
 	}
 }

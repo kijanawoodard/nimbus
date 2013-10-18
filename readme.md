@@ -26,7 +26,7 @@ Messages are ordinary classes. There are no special interfaces to attach.
 Nimbus does not have an opinion about Commands vs Queries or whether a response should be returned for either. Your application controls those semantics.
 
 ##Why
-Minimize dependencies. If a class only depends on a mediator and on messages, implementations can change easily. Superfluous abstractions, like implementation specific interfaces [IFooService] can disappear.
+Minimize dependencies. If a class only depends on a mediator and on messages, implementations can change easily. Superfluous abstractions and implementation specific interfaces, such as IFooService, can disappear.
 
 ##Usage
 
@@ -80,8 +80,7 @@ Minimize dependencies. If a class only depends on a mediator and on messages, im
 ###Be explicit to handle contra-variant handlers
 	mediator.Subscribe(
 		() => new ISubscribeFor<ChangeUserName>[] { new ReturnsName(), new GenericHook(), new ConsoleLogger() });
-	
-###UnitOfWork
+
 ###Use Mediator in handler		
 
 	public class AccountExpiditer : IHandleWithMediator<ProcessAccount>
@@ -92,7 +91,27 @@ Minimize dependencies. If a class only depends on a mediator and on messages, im
 			account.Process();
 		}
 	}
-	
+
+###Orchestrate a Unit of Work
+
+	using (var store = NewDocumentStore())
+	{
+		var mediator = new Mediator();
+		mediator.SubscribeScalar<RegisterElephant, string>(() =>
+		{
+			var session = store.OpenSession(); //per request scope
+			return new ISubscribeFor<RegisterElephant>[] {new RavenZoo(session), new RavenUoWCommiter(session)};
+		});
+
+		var id = mediator.Send<RegisterElephant, string>(new RegisterElephant {Name = "Ellie"});
+
+		using (var session = store.OpenSession())
+		{
+			var elephant = session.Load<Elephant>(id);
+			Assert.AreEqual("Ellie", elephant.Name);
+		}
+	}
+				
 ##Why not ...?
 
 [NServiceBus] - I love NServiceBus, but sometimes I just want an in memory bus. NServiceBus 4.0 has an [in memory bus][nsb in memory], but it's semantics are restricted to publishing events. Nimbus is more concerned with mediating messages without regard to command/query semantics.

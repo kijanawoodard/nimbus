@@ -7,8 +7,8 @@ using NUnit.Framework;
 
 namespace nimbus.tests
 {
-    public class MediatorTests
-    {
+	public class MediatorTests
+	{
 		[Test]
 		public void Throws_If_Message_Not_Subscribed()
 		{
@@ -23,10 +23,10 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => new ISubscribeFor<ChangeUserName>[] { new ReturnsName() },
+				() => new ISubscribeFor<ChangeUserName>[] {new ReturnsName()},
 				() => string.Empty);
 
-			var command = new ChangeUserName { Name = "Foo Bar" };
+			var command = new ChangeUserName {Name = "Foo Bar"};
 			var result = mediator.Send<ChangeUserName, string>(command);
 			Assert.AreEqual("Foo Bar", result);
 		}
@@ -37,10 +37,10 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => new ISubscribeFor<ChangeUserName>[] { new ReturnsName(), new ConsoleLogger() },
+				() => new ISubscribeFor<ChangeUserName>[] {new ReturnsName(), new ConsoleLogger()},
 				() => string.Empty);
 
-			var command = new ChangeUserName { Name = "Foo Bar" };
+			var command = new ChangeUserName {Name = "Foo Bar"};
 			var result = mediator.Send<ChangeUserName, string>(command);
 			Assert.AreEqual("Foo Bar", result);
 		}
@@ -51,10 +51,10 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => new ISubscribeFor<ChangeUserName>[] { new ConsoleLogger(), new ReturnsName() },
+				() => new ISubscribeFor<ChangeUserName>[] {new ConsoleLogger(), new ReturnsName()},
 				() => string.Empty);
 
-			var command = new ChangeUserName { Name = "Foo Bar" };
+			var command = new ChangeUserName {Name = "Foo Bar"};
 			var result = mediator.Send<ChangeUserName, string>(command);
 			Assert.AreEqual("Foo Bar", result);
 		}
@@ -65,10 +65,10 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => new ISubscribeFor<ChangeUserName>[] { new ReturnsName(), new GenericHook(), new ConsoleLogger() },
+				() => new ISubscribeFor<ChangeUserName>[] {new ReturnsName(), new GenericHook(), new ConsoleLogger()},
 				() => string.Empty);
 
-			var command = new ChangeUserName { Name = "Foo Bar" };
+			var command = new ChangeUserName {Name = "Foo Bar"};
 			var result = mediator.Send<ChangeUserName, string>(command);
 			Console.WriteLine("Result: {0}", result);
 			Assert.AreEqual("Foo Bar", result);
@@ -81,10 +81,10 @@ namespace nimbus.tests
 
 			var counter = new Counter();
 			mediator.Subscribe<ChangeUserName, string>(
-				() => new ISubscribeFor<ChangeUserName>[] { counter },
+				() => new ISubscribeFor<ChangeUserName>[] {counter},
 				() => string.Empty);
 
-			var command = new ChangeUserName { Name = "Foo Bar" };
+			var command = new ChangeUserName {Name = "Foo Bar"};
 			mediator.Send<ChangeUserName>(command);
 			Assert.AreEqual(1, counter.Count);
 		}
@@ -94,7 +94,7 @@ namespace nimbus.tests
 		{
 			var mediator = new Mediator();
 
-			mediator.Subscribe<GetUserName, NameViewModel>(() => new [] { new SomeRepository() });
+			mediator.Subscribe<GetUserName, NameViewModel>(() => new[] {new SomeRepository()});
 
 			var result = mediator.Send<GetUserName, NameViewModel>(new GetUserName());
 			Assert.AreEqual("Some Name", result.Name);
@@ -106,8 +106,8 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<GetUserName, NameViewModel>(
-					() => new[] { new SomeRepository() },
-					() => new NameViewModel("some value"));
+				() => new[] {new SomeRepository()},
+				() => new NameViewModel("some value"));
 
 			var result = mediator.Send<GetUserName, NameViewModel>(new GetUserName());
 			Assert.AreEqual("Some Name", result.Name);
@@ -119,9 +119,9 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.SubscribeScalar<ChangeUserName, string>(
-				() => new ISubscribeFor<ChangeUserName>[] { new ReturnsName() });
+				() => new ISubscribeFor<ChangeUserName>[] {new ReturnsName()});
 
-			var command = new ChangeUserName { Name = "Foo Bar" };
+			var command = new ChangeUserName {Name = "Foo Bar"};
 			var result = mediator.Send<ChangeUserName, string>(command);
 			Assert.AreEqual("Foo Bar", result);
 		}
@@ -132,9 +132,9 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.SubscribeScalar<ChangeUserName, int>(
-				() => new ISubscribeFor<ChangeUserName, int>[] { new Returns42() });
+				() => new ISubscribeFor<ChangeUserName, int>[] {new Returns42()});
 
-			var command = new ChangeUserName { Name = "Foo Bar" };
+			var command = new ChangeUserName {Name = "Foo Bar"};
 			var result = mediator.Send<ChangeUserName, int>(command);
 			Assert.AreEqual(42, result);
 		}
@@ -146,9 +146,9 @@ namespace nimbus.tests
 
 			var counter = new Counter();
 			mediator.Subscribe<ChangeUserName>(
-				() => new ISubscribeFor<ChangeUserName>[] { counter });
+				() => new ISubscribeFor<ChangeUserName>[] {counter});
 
-			var command = new ChangeUserName { Name = "Foo Bar" };
+			var command = new ChangeUserName {Name = "Foo Bar"};
 			mediator.Send<ChangeUserName>(command);
 			Assert.AreEqual(1, counter.Count);
 		}
@@ -157,27 +157,27 @@ namespace nimbus.tests
 		public void CanSubscribeAndSendWithoutGenericArgs()
 		{
 			var mediator = new Mediator();
-			mediator.Subscribe(() => new [] { new NamePersistor() });
-			mediator.Send(new ChangeUserName { Name = "Foo Bar" });
+			mediator.Subscribe(() => new[] {new NamePersistor()});
+			mediator.Send(new ChangeUserName {Name = "Foo Bar"});
 		}
 
 		[Test]
 		public void SecondSubscription_Throws()
 		{
 			var mediator = new Mediator();
-			mediator.Subscribe(() => new[] { new NamePersistor() });
-			Assert.Throws<ArgumentException>(() => mediator.Subscribe(() => new[] { new Returns42() }));
+			mediator.Subscribe(() => new[] {new NamePersistor()});
+			Assert.Throws<ArgumentException>(() => mediator.Subscribe(() => new[] {new Returns42()}));
 		}
-		
-	    [Test]
-	    public void CanUseMediatorWithinHandler()
-	    {
-			var mediator = new Mediator();
-			mediator.Subscribe<ProcessAccount>(() => new[] { new AccountExpiditer() });
-		    mediator.Subscribe<GetAccount, Account>(() => new [] {new AccountRepository()});
 
-		    mediator.Send(new ProcessAccount());
-	    }
+		[Test]
+		public void CanUseMediatorWithinHandler()
+		{
+			var mediator = new Mediator();
+			mediator.Subscribe<ProcessAccount>(() => new[] {new AccountExpiditer()});
+			mediator.Subscribe<GetAccount, Account>(() => new[] {new AccountRepository()});
+
+			mediator.Send(new ProcessAccount());
+		}
 
 		public class ChangeUserName
 		{
@@ -226,11 +226,11 @@ namespace nimbus.tests
 			}
 		}
 
-	    public class GenericHook : IHandle<object>
+		public class GenericHook : IHandle<object>
 		{
 			public void Handle(object message)
 			{
-				
+
 			}
 		}
 
@@ -241,16 +241,26 @@ namespace nimbus.tests
 
 		public class NameViewModel
 		{
-			public NameViewModel() { }
-			public NameViewModel(string someParam) { }
+			public NameViewModel()
+			{
+			}
+
+			public NameViewModel(string someParam)
+			{
+			}
 
 			public string Name { get; set; }
 		}
 
 		public class SomeRepository : IHandle<GetUserName, NameViewModel>
 		{
-			public SomeRepository() { }
-			public SomeRepository(string someParam) { }
+			public SomeRepository()
+			{
+			}
+
+			public SomeRepository(string someParam)
+			{
+			}
 
 			public NameViewModel Handle(GetUserName message, NameViewModel result)
 			{
@@ -261,13 +271,23 @@ namespace nimbus.tests
 
 		public class Account
 		{
-			public void Process() { Console.WriteLine("account processed"); }
+			public void Process()
+			{
+				Console.WriteLine("account processed");
+			}
 		}
 
-		public class ProcessAccount{ /*account id*/ }
-		public class GetAccount { /*account id*/ }
-		
-		public class AccountRepository: IHandle<GetAccount, Account>
+		public class ProcessAccount
+		{
+			/*account id*/
+		}
+
+		public class GetAccount
+		{
+			/*account id*/
+		}
+
+		public class AccountRepository : IHandle<GetAccount, Account>
 		{
 			public Account Handle(GetAccount message, Account result)
 			{
@@ -283,5 +303,5 @@ namespace nimbus.tests
 				account.Process();
 			}
 		}
-    }
+	}
 }

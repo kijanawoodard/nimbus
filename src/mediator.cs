@@ -15,7 +15,7 @@ namespace nimbus
 
 	public interface IHandle<in TMessage, TResult> : IHandleMarker<TMessage>
 	{
-		TResult Handle(TResult result, TMessage message);
+		TResult Handle(TMessage message, TResult result);
 	}
 
 	public interface IHandleWithMediator<in TMessage> : IHandleMarker<TMessage>
@@ -25,7 +25,7 @@ namespace nimbus
 
 	public interface IHandleWithMediator<in TMessage, TResult> : IHandleMarker<TMessage>
 	{
-		TResult Handle(IMediator mediator, TResult result, TMessage message);
+		TResult Handle(IMediator mediator, TMessage message, TResult result);
 	}
 
 	public interface IRegisterHandlers
@@ -106,7 +106,7 @@ namespace nimbus
 
 		private TResult Dispatch<TMessage, TResult>(IHandle<TMessage, TResult> handler, TMessage message, TResult result)
 		{
-			return handler.Handle(result, message);
+			return handler.Handle(message, result);
 		}
 
 		private TResult Dispatch<TMessage, TResult>(IHandleWithMediator<TMessage> handler, TMessage message, TResult result)
@@ -117,7 +117,7 @@ namespace nimbus
 
 		private TResult Dispatch<TMessage, TResult>(IHandleWithMediator<TMessage, TResult> handler, TMessage message, TResult result)
 		{
-			return handler.Handle(this, result, message);
+			return handler.Handle(this, message, result);
 		}
 
 		public Mediator()

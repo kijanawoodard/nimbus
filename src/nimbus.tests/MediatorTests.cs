@@ -135,7 +135,7 @@ namespace nimbus.tests
 
 		public class ReturnsName : IHandleWithMediator<ChangeUserName, string>
 		{
-			public string Handle(IMediator mediator, string result, ChangeUserName message)
+			public string Handle(IMediator mediator, ChangeUserName message, string result)
 			{
 				return message.Name;
 			}
@@ -179,7 +179,7 @@ namespace nimbus.tests
 
 		public class JimNameRepository : IHandle<GetUserName, NameViewModel>
 		{
-			public NameViewModel Handle(NameViewModel result, GetUserName message)
+			public NameViewModel Handle(GetUserName message, NameViewModel result)
 			{
 				result.Name = "Jim";
 				return result;

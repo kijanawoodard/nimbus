@@ -4,18 +4,19 @@
 >
 > -- <cite>[morewords.com]</cite>
 
+Or
+
 >A [nimble] message bus
->
-> -- <cite>Kijana Woodard</cite>
+
+Or
 
 >.Net In-Memory Bus
->
-> -- <cite>Kijana Woodard</cite>
+
 
 ##Summary
 An in-memory bus, inspired by [ShortBus]. 
 
-Nimbus does not use an IoC. Instead, you subscribe the handlers you want to process each message explicitly. For the price of a little more typing, you get a very discoverable bus configuration and no magic. You always know exactly what handlers will run.
+Nimbus does not use an IoC container. Instead, you subscribe the handlers you want to process each message explicitly. For the price of a little more typing, you get a very discoverable bus configuration and no magic. You always know exactly what handlers will run.
 
 With explicit configuration, you can have handlers that are in "test" without having to worry about them getting executed. Multi-tenancy is as simple as an if statement or whatever other normal programming construct you want to use. You don't have to learn the intricacies of a container.
 

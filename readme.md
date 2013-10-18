@@ -12,7 +12,7 @@ Use normal programming techniques to configure your application.
 
 >.Net In-Memory Bus
 
-Happens now.
+Happens now. WWant something to happen later, code it in a handler.
 
 ##Summary
 An in-memory bus, inspired by [ShortBus]. 
@@ -24,6 +24,9 @@ With explicit configuration, you can have handlers that are in "test" without ha
 Messages are ordinary classes. There are no special interfaces to attach. 
 
 Nimbus does not have an opinion about Commands vs Queries or whether a response should be returned for either. Your application controls those semantics.
+
+##Why
+Minimize dependencies. If a class only depends on a mediator and on messages, implementations can change easily. Superfluous abstractions, like implementation specific interfaces [IFooService] can disappear.
 
 ##Usage
 

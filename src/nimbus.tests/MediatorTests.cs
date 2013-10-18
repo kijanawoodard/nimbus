@@ -23,7 +23,7 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName() },
+				() => new IHandleMessages<ChangeUserName>[] { new ReturnsName() },
 				() => string.Empty);
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
@@ -37,7 +37,7 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName(), new ConsoleLogger() },
+				() => new IHandleMessages<ChangeUserName>[] { new ReturnsName(), new ConsoleLogger() },
 				() => string.Empty);
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
@@ -51,7 +51,7 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => new IHandleMarker<ChangeUserName>[] { new ConsoleLogger(), new ReturnsName() },
+				() => new IHandleMessages<ChangeUserName>[] { new ConsoleLogger(), new ReturnsName() },
 				() => string.Empty);
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
@@ -65,7 +65,7 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<ChangeUserName, string>(
-				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName(), new GenericHook(), new ConsoleLogger() },
+				() => new IHandleMessages<ChangeUserName>[] { new ReturnsName(), new GenericHook(), new ConsoleLogger() },
 				() => string.Empty);
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
@@ -81,7 +81,7 @@ namespace nimbus.tests
 
 			var counter = new Counter();
 			mediator.Subscribe<ChangeUserName, string>(
-				() => new IHandleMarker<ChangeUserName>[] { counter },
+				() => new IHandleMessages<ChangeUserName>[] { counter },
 				() => string.Empty);
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
@@ -95,7 +95,7 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.Subscribe<GetUserName, NameViewModel>(
-				() => new IHandleMarker<GetUserName>[] { new JimNameRepository() });
+				() => new IHandleMessages<GetUserName>[] { new JimNameRepository() });
 
 			var result = mediator.Send<GetUserName, NameViewModel>(new GetUserName());
 			Assert.AreEqual("Jim", result.Name);
@@ -107,7 +107,7 @@ namespace nimbus.tests
 			var mediator = new Mediator();
 
 			mediator.SubscribeScalar<ChangeUserName, string>(
-				() => new IHandleMarker<ChangeUserName>[] { new ReturnsName() });
+				() => new IHandleMessages<ChangeUserName>[] { new ReturnsName() });
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
 			var result = mediator.Send<ChangeUserName, string>(command);
@@ -121,7 +121,7 @@ namespace nimbus.tests
 
 			var counter = new Counter();
 			mediator.Subscribe<ChangeUserName>(
-				() => new IHandleMarker<ChangeUserName>[] { counter });
+				() => new IHandleMessages<ChangeUserName>[] { counter });
 
 			var command = new ChangeUserName { Name = "Foo Bar" };
 			mediator.Send<ChangeUserName>(command);

@@ -44,7 +44,7 @@ namespace nimbus
 
 	public class Mediator : ISubscribeHandlers, IMediator
 	{
-		private readonly Dictionary<Type, Registration> _subscriptions;
+		private readonly Dictionary<Type, Subscription> _subscriptions;
 
 		public void Subscribe<TMessage>(Func<IHandleMessages<TMessage>[]> handlers)
 		{
@@ -68,7 +68,7 @@ namespace nimbus
 
 		private void SubscribeInternal<TMessage>(Func<IHandleMessages<TMessage>[]> handlers, Func<dynamic> initializeResult)
 		{
-			_subscriptions.Add(typeof(TMessage), new Registration(initializeResult, handlers));
+			_subscriptions.Add(typeof(TMessage), new Subscription(handlers, initializeResult));
 		}
 
 		public void Send<TMessage>(TMessage message)
@@ -122,19 +122,19 @@ namespace nimbus
 
 		public Mediator()
 		{
-			_subscriptions = new Dictionary<Type, Registration>();
+			_subscriptions = new Dictionary<Type, Subscription>();
 		}
 
-		class Registration
+		class Subscription
 		{
-			public Registration(Func<dynamic> initializeResult, Func<dynamic[]> createHandlers)
+			public Subscription(Func<dynamic[]> createHandlers, Func<dynamic> initializeResult)
 			{
-				InitializeResult = initializeResult;
 				CreateHandlers = createHandlers;
+				InitializeResult = initializeResult;
 			}
 
-			public Func<dynamic> InitializeResult { get; private set; }
 			public Func<dynamic[]> CreateHandlers { get; private set; }
+			public Func<dynamic> InitializeResult { get; private set; }
 		}
 	}
 }

@@ -168,20 +168,12 @@ namespace nimbus.tests
 			mediator.Subscribe(() => new[] { new NamePersistor() });
 			Assert.Throws<ArgumentException>(() => mediator.Subscribe(() => new[] { new Returns42() }));
 		}
-
-		[Test]
-		public void CanSubscribeViaGenericArg()
-		{
-			var mediator = new Mediator();
-			mediator.Subscribe<ChangeUserName, NamePersistor>();
-			mediator.Send(new ChangeUserName { Name = "Foo Bar" });
-		}
-
+		
 	    [Test]
 	    public void CanUseMediatorWithinHandler()
 	    {
 			var mediator = new Mediator();
-			mediator.Subscribe<ProcessAccount, AccountExpiditer>();
+			mediator.Subscribe<ProcessAccount>(() => new[] { new AccountExpiditer() });
 		    mediator.Subscribe<GetAccount, Account>(() => new [] {new AccountRepository()});
 
 		    mediator.Send(new ProcessAccount());

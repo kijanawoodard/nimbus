@@ -80,11 +80,6 @@ Minimize dependencies. If a class only depends on a mediator and on messages, im
 ###Be explicit to handle contra-variant handlers
 	mediator.Subscribe(
 		() => new ISubscribeFor<ChangeUserName>[] { new ReturnsName(), new GenericHook(), new ConsoleLogger() });
-
-###Convenience methods
-
-	mediator.Subscribe<ChangeUserName, NamePersistor>();
-	//TODO: could add many of such helpers
 	
 ###UnitOfWork
 ###Use Mediator in handler		

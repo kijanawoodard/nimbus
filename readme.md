@@ -124,7 +124,7 @@ Minimize dependencies. If a class only depends on a mediator and on messages, im
 		mediator.SubscribeScalar<RegisterElephant, string>(() =>
 		{
 			var session = store.OpenSession(); //per request scope
-			return new ISubscribeFor<RegisterElephant>[] {new RavenZoo(session), new RavenUoWCommiter(session)};
+			return new ISubscribeFor<RegisterElephant>[] {new RavenZoo(session), new RavenUoWCommitter(session)};
 		});
 
 		var id = mediator.Send<RegisterElephant, string>(new RegisterElephant {Name = "Ellie"});

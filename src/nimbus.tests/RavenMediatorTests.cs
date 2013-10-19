@@ -15,7 +15,7 @@ namespace nimbus.tests
 				mediator.SubscribeScalar<RegisterElephant, string>(() =>
 				{
 					var session = store.OpenSession(); //per request scope
-					return new ISubscribeFor<RegisterElephant>[] {new RavenZoo(session), new RavenUoWCommiter(session)};
+					return new ISubscribeFor<RegisterElephant>[] {new RavenZoo(session), new RavenUoWCommitter(session)};
 				});
 
 				var id = mediator.Send<RegisterElephant, string>(new RegisterElephant {Name = "Ellie"});
@@ -56,11 +56,11 @@ namespace nimbus.tests
 			}
 		}
 
-		public class RavenUoWCommiter : IHandle<object>
+		public class RavenUoWCommitter : IHandle<object>
 		{
 			private readonly IDocumentSession _session;
 
-			public RavenUoWCommiter(IDocumentSession session)
+			public RavenUoWCommitter(IDocumentSession session)
 			{
 				_session = session;
 			}

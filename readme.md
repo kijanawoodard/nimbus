@@ -78,19 +78,41 @@ Minimize dependencies. If a class only depends on a mediator and on messages, im
 		() => new [] { new ReturnsName(), new GenericHook(), new ConsoleLogger() });
 				
 ###Be explicit to handle contra-variant handlers
+
+	public class GenericHook : IHandle<object>
+	{
+		public void Handle(object message) { }
+	}
+		
 	mediator.Subscribe(
 		() => new ISubscribeFor<ChangeUserName>[] { new ReturnsName(), new GenericHook(), new ConsoleLogger() });
 
 ###Use Mediator in handler		
 
-	public class AccountExpiditer : IHandleWithMediator<ProcessAccount>
+	//handler
+	public class AccountExpiditer : IHandle<ProcessAccount>
 	{
-		public void Handle(IMediator mediator, ProcessAccount message)
+		private readonly IMediator _mediator;
+
+		public AccountExpiditer(IMediator mediator)
 		{
-			var account = mediator.Send<GetAccount, Account>(new GetAccount());
+			_mediator = mediator;
+		}
+
+		public void Handle(ProcessAccount message)
+		{
+			var account = _mediator.Send<GetAccount, Account>(new GetAccount());
 			account.Process();
 		}
 	}
+	
+	//setup
+	var mediator = new Mediator();
+	mediator.Subscribe<ProcessAccount>(() => new[] {new AccountExpiditer(mediator)});
+	mediator.Subscribe<GetAccount, Account>(() => new[] {new AccountRepository()});
+	
+	//send
+	mediator.Send(new ProcessAccount());
 
 ###Orchestrate a Unit of Work
 

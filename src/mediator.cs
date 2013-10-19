@@ -21,21 +21,6 @@ namespace nimbus
 		TResult Handle(TMessage message, TResult result);
 	}
 
-	public interface IHandleWithMediator<in TMessage> : ISubscribeFor<TMessage>
-	{
-		void Handle(IMediator mediator, TMessage message);
-	}
-
-	public interface IHandleWithMediator<in TMessage, TResult> : ISubscribeFor<TMessage, TResult>
-	{
-		TResult Handle(IMediator mediator, TMessage message);
-	}
-
-	public interface IHandleResultWithMediator<in TMessage, TResult> : ISubscribeFor<TMessage, TResult>
-	{
-		TResult Handle(IMediator mediator, TMessage message, TResult result);
-	}
-
 	public interface ISubscribeHandlers
 	{
 		void Subscribe<TMessage>(Func<ISubscribeFor<TMessage>[]> handlers);
@@ -126,22 +111,6 @@ namespace nimbus
 		private TResult Dispatch<TMessage, TResult>(IHandleResult<TMessage, TResult> handler, TMessage message, TResult result)
 		{
 			return handler.Handle(message, result);
-		}
-
-		private TResult Dispatch<TMessage, TResult>(IHandleWithMediator<TMessage> handler, TMessage message, TResult result)
-		{
-			handler.Handle(this, message);
-			return result;
-		}
-
-		private TResult Dispatch<TMessage, TResult>(IHandleWithMediator<TMessage, TResult> handler, TMessage message, TResult result)
-		{
-			return handler.Handle(this, message);
-		}
-
-		private TResult Dispatch<TMessage, TResult>(IHandleResultWithMediator<TMessage, TResult> handler, TMessage message, TResult result)
-		{
-			return handler.Handle(this, message, result);
 		}
 
 		public Mediator()

@@ -81,7 +81,7 @@ namespace nimbus
 				throw new ApplicationException("No Handlers subscribed for " + typeof(TMessage).Name);
 
 			var handlers = subscription.CreateHandlers();
-			var response = subscription.InitializeResult();
+			var result = subscription.InitializeResult();
 
 			/*
 			 * Use dynamic dispatch instead of if statements
@@ -91,10 +91,10 @@ namespace nimbus
 			 */
 			foreach (var handler in handlers)
 			{
-				response = Dispatch(handler, message, response);
+				result = Dispatch(handler, message, result);
 			}
 			
-			return response;
+			return result;
 		}
 
 		private TResult Dispatch<TMessage, TResult>(IHandle<TMessage> handler, TMessage message, TResult result)

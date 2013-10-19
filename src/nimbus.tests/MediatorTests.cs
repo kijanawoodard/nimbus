@@ -194,7 +194,7 @@ namespace nimbus.tests
 
 		public class ReturnsName : IHandle<ChangeUserName, string>
 		{
-			public string Handle(ChangeUserName message, string result)
+			public string Handle(ChangeUserName message)
 			{
 				return message.Name;
 			}
@@ -220,7 +220,7 @@ namespace nimbus.tests
 
 		public class Returns42 : IHandle<ChangeUserName, int>
 		{
-			public int Handle(ChangeUserName message, int result)
+			public int Handle(ChangeUserName message)
 			{
 				return 42;
 			}
@@ -252,7 +252,7 @@ namespace nimbus.tests
 			public string Name { get; set; }
 		}
 
-		public class SomeRepository : IHandle<GetUserName, NameViewModel>
+		public class SomeRepository : IHandleResult<GetUserName, NameViewModel>
 		{
 			public SomeRepository()
 			{
@@ -289,7 +289,7 @@ namespace nimbus.tests
 
 		public class AccountRepository : IHandle<GetAccount, Account>
 		{
-			public Account Handle(GetAccount message, Account result)
+			public Account Handle(GetAccount message)
 			{
 				return new Account(); //return account 
 			}

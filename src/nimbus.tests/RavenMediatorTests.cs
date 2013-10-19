@@ -48,7 +48,7 @@ namespace nimbus.tests
 				_session = session;
 			}
 
-			public string Handle(RegisterElephant message, string result)
+			public string Handle(RegisterElephant message)
 			{
 				var paciderm = new Elephant {Name = message.Name};
 				_session.Store(paciderm);

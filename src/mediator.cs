@@ -13,6 +13,11 @@ namespace nimbus
 
 	public interface IHandle<in TMessage, TResult> : ISubscribeFor<TMessage, TResult>
 	{
+		TResult Handle(TMessage message);
+	}
+
+	public interface IHandleResult<in TMessage, TResult> : ISubscribeFor<TMessage, TResult>
+	{
 		TResult Handle(TMessage message, TResult result);
 	}
 
@@ -22,6 +27,11 @@ namespace nimbus
 	}
 
 	public interface IHandleWithMediator<in TMessage, TResult> : ISubscribeFor<TMessage, TResult>
+	{
+		TResult Handle(IMediator mediator, TMessage message);
+	}
+
+	public interface IHandleResultWithMediator<in TMessage, TResult> : ISubscribeFor<TMessage, TResult>
 	{
 		TResult Handle(IMediator mediator, TMessage message, TResult result);
 	}
@@ -79,7 +89,7 @@ namespace nimbus
 			return Execute(message);
 		}
 		
-		private dynamic Execute<TMessage>(TMessage message)
+		private dynamic Execute<TMessage>(TMessage message) 
 		{
 			Subscription subscription;
 			if (!_subscriptions.TryGetValue(typeof(TMessage), out subscription))
@@ -98,7 +108,7 @@ namespace nimbus
 			{
 				response = Dispatch(handler, message, response);
 			}
-
+			
 			return response;
 		}
 
@@ -110,6 +120,11 @@ namespace nimbus
 
 		private TResult Dispatch<TMessage, TResult>(IHandle<TMessage, TResult> handler, TMessage message, TResult result)
 		{
+			return handler.Handle(message);
+		}
+
+		private TResult Dispatch<TMessage, TResult>(IHandleResult<TMessage, TResult> handler, TMessage message, TResult result)
+		{
 			return handler.Handle(message, result);
 		}
 
@@ -120,6 +135,11 @@ namespace nimbus
 		}
 
 		private TResult Dispatch<TMessage, TResult>(IHandleWithMediator<TMessage, TResult> handler, TMessage message, TResult result)
+		{
+			return handler.Handle(this, message);
+		}
+
+		private TResult Dispatch<TMessage, TResult>(IHandleResultWithMediator<TMessage, TResult> handler, TMessage message, TResult result)
 		{
 			return handler.Handle(this, message, result);
 		}

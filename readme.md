@@ -12,7 +12,7 @@ Use normal programming techniques to configure your application.
 
 >.Net In-Memory Bus
 
-Happens now. WWant something to happen later, code it in a handler.
+Happens now. Want something to happen later, code it in a handler.
 
 ##Summary
 An in-memory bus, inspired by [ShortBus] and Greg Young's [8 lines of code]. 

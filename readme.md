@@ -15,7 +15,7 @@ Use normal programming techniques to configure your application.
 Happens now. WWant something to happen later, code it in a handler.
 
 ##Summary
-An in-memory bus, inspired by [ShortBus]. 
+An in-memory bus, inspired by [ShortBus] and Greg Young's [8 lines of code]. 
 
 Nimbus does not use an IoC container. Instead, you subscribe the handlers you want to process each message explicitly. For the price of a little more typing, you get a very discoverable bus configuration and no magic. You always know exactly what handlers will run.
 
@@ -24,6 +24,8 @@ With explicit configuration, you can have handlers that are in "test" without ha
 Messages are ordinary classes. There are no special interfaces to attach. 
 
 Nimbus does not have an opinion about Commands vs Queries or whether a response should be returned for either. Your application controls those semantics.
+
+This is _not_ a framework. Copy/paste deploy nimbus into your solution. Modify to taste. It all fits in [one file].
 
 ##Why
 Minimize dependencies. If a class only depends on a mediator and on messages, implementations can change easily. Superfluous abstractions and implementation specific interfaces, such as IFooService, can disappear.
@@ -157,6 +159,8 @@ Microsoft Azure/Windows [Service Bus][microsoft service bus] - More than what I 
 [morewords.com]: http://www.morewords.com/word/nimbus/
 [nimble]: http://www.merriam-webster.com/dictionary/nimble
 [ShortBus]: https://github.com/mhinze/ShortBus
+[8 lines of code]: http://www.infoq.com/presentations/8-lines-code-refactoring
+[one file]: https://github.com/kijanawoodard/nimbus/blob/master/src/mediator.cs
 [uow]: https://github.com/kijanawoodard/nimbus/blob/ab7ff533da2f44e3c2f5ed1c6daaf36e907deb7e/src/nimbus.tests/RavenMediatorTests.cs#L21
 [NServiceBus]: http://particular.net/NServiceBus
 [nsb in memory]: http://particular.net/articles/using-the-in-memory-bus

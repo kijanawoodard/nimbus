@@ -81,12 +81,12 @@ namespace nimbus
 		
 		private dynamic Execute<TMessage>(TMessage message)
 		{
-			if (!_subscriptions.ContainsKey(typeof(TMessage)))
+			Subscription subscription;
+			if (!_subscriptions.TryGetValue(typeof(TMessage), out subscription))
 				throw new ApplicationException("No Handlers subscribed for " + typeof(TMessage).Name);
 
-			var registration = _subscriptions[typeof(TMessage)];
-			var handlers = registration.CreateHandlers();
-			var response = registration.InitializeResult();
+			var handlers = subscription.CreateHandlers();
+			var response = subscription.InitializeResult();
 
 			/*
 			 * Use dynamic dispatch instead of if statements

@@ -155,5 +155,19 @@ nimbus: 3.2379474s | 3,088.38/ms
 Baseline: 0.0236949s | 422,031.75/ms
 Manual: 0.3307607s | 30,233.34/ms
 nimbus: 0.5440601s | 18,380.32/ms - Beats containsKey and dereference @12,130.85/ms
+
+--------------------------------------
+2013-10-19 03:14 | 10000000 iterations - Use string for dictionary key instead of type - a bit slower
+--------------------------------------
+Baseline: 0.0236549s | 422,745.39/ms
+Manual: 0.3332956s | 30,003.40/ms
+nimbus: 3.4032898s | 2,938.33/ms
+ 
+--------------------------------------
+2013-10-19 03:16 | 10000000 iterations - use int for dictionary key - a bit faster
+--------------------------------------
+Baseline: 0.0234211s | 426,965.43/ms
+Manual: 0.328381s | 30,452.43/ms
+nimbus: 3.0904552s | 3,235.77/ms
  
 */

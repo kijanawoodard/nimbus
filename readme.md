@@ -28,7 +28,7 @@ Nimbus does not have an opinion about Commands vs Queries or whether a response 
 This is _not_ a framework. Copy/paste deploy nimbus into your solution. Modify to taste. It all fits in [one file].
 
 ##Why
-Minimize dependencies. If a class only depends on a mediator and on messages, implementations can change easily. Superfluous abstractions and implementation specific interfaces, such as IFooService, can disappear.
+Minimize dependencies. If a class only depends on a mediator and/or messages, dependency implementations can change easily and as radically as necessary. Superfluous abstractions and implementation specific interfaces, such as IFooService, can disappear. Changing persistence technology is straightforward: handle persistence related messages with the new technology. Persistence tech can be mixed and matched in whatever combination is appropriate.
 
 ##Usage
 

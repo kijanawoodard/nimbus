@@ -15,7 +15,7 @@ Use normal programming techniques to configure your application.
 Happens now. Want something to happen later, code it in a handler.
 
 ##Summary
-An in-memory bus, inspired by [ShortBus] and Greg Young's [8 lines of code]. 
+An in-memory bus, inspired by [ShortBus], Greg Young's [8 lines of code], Ayende's [limit your abstractions] series, and Rob Conery's [massive]. 
 
 Nimbus does not use an IoC container. Instead, you subscribe the handlers you want to process each message explicitly. For the price of a little more typing, you get a very discoverable bus configuration and no magic. You always know exactly what handlers will run.
 
@@ -160,6 +160,8 @@ Microsoft Azure/Windows [Service Bus][microsoft service bus] - More than what I 
 [nimble]: http://www.merriam-webster.com/dictionary/nimble
 [ShortBus]: https://github.com/mhinze/ShortBus
 [8 lines of code]: http://www.infoq.com/presentations/8-lines-code-refactoring
+[limit your abstractions]: http://ayende.com/blog/154081/limit-your-abstractions-you-only-get-six-to-a-dozen-in-the-entire-app
+[massive]: https://github.com/robconery/massive
 [one file]: https://github.com/kijanawoodard/nimbus/blob/master/src/mediator.cs
 [uow]: https://github.com/kijanawoodard/nimbus/blob/ab7ff533da2f44e3c2f5ed1c6daaf36e907deb7e/src/nimbus.tests/RavenMediatorTests.cs#L21
 [NServiceBus]: http://particular.net/NServiceBus
